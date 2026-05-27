@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>팩폭 해줄게</title>
+<script type="importmap">
+  {
+    "imports": {
+      "@google/generative-ai": "https://esm.run/@google/generative-ai"
+    }
+  }
+</script>
+  <script type="module" crossorigin src="/assets/index-BN1Nk4Ek.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-D0nZc3LZ.css">
+</head>
+<body>
+  <div class="container">
+    <h1>팩폭 해줄게</h1>
+    <p class="subtitle">사연을 올리면 AI가 명언이나 팩폭으로 답해줘</p>
+
+    <button id="open-form-btn" class="open-form-btn">+ 사연 올리기...</button>
+
+    <div id="post-form" class="post-form hidden">
+      <textarea id="story" placeholder="사연을 솔직하게 털어놓으세요..." maxlength="1000"></textarea>
+      <p class="char-count"><span id="story-count">0</span> / 1000</p>
+
+      <div class="intensity-btns">
+        <button class="intensity-btn" data-intensity="순한맛">🌱 순한맛</button>
+        <button class="intensity-btn selected" data-intensity="중간">🌶 중간</button>
+        <button class="intensity-btn" data-intensity="핵팩폭">💣 핵팩폭</button>
+      </div>
+
+      <div class="pw-row">
+        <input type="password" id="pw" placeholder="삭제 비밀번호 (선택)" />
+        <span class="pw-hint">나중에 삭제할 때 필요해요</span>
+      </div>
+
+      <div class="form-btns">
+        <button id="cancel-btn" class="cancel-btn">취소</button>
+        <button id="submit-btn" class="submit-btn">올리기</button>
+      </div>
+    </div>
+
+    <div id="feed"></div>
+  </div>
+
+
+
+</body>
+</html>
