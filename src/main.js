@@ -9,7 +9,7 @@ const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_KEY;
 const ai = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const INTENSITY = {
-  순한맛: { emoji: "🌱", prompt: "따뜻하고 부드럽게, 위로와 함께 적절한 조언이나 명언으로 답해줘. 반말로 친근하게. 너무 직설적이지 않게." },
+  순한맛: { emoji: "🌱", prompt: "따뜻한 명언이나 위로의 말로 답해줘. 유명한 철학자나 작가의 명언을 인용해도 좋아. 반말로 친근하게." },
   중간: { emoji: "🌶", prompt: "솔직하게 팩폭해줘. 명언이나 날카로운 한마디로 현실을 직시하게 해줘. 반말로, 유머도 약간 섞어도 돼." },
   핵팩폭: { emoji: "💣", prompt: "거침없이 핵팩폭해줘. 돌려말하지 말고 반말로 직설적으로, 뼈 때리는 한마디로 현실을 직면하게 해줘." },
 };
