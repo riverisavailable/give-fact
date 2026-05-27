@@ -5,7 +5,7 @@ import {
 } from "firebase/firestore";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyAA4d_vkq1ZLNKCbbckGlcJzwvkcJM37os";
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_KEY;
 const ai = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const INTENSITY = {
@@ -16,10 +16,12 @@ const INTENSITY = {
 
 let selectedIntensity = "중간";
 
+// 글자수 카운터
 document.getElementById("story").addEventListener("input", (e) => {
   document.getElementById("story-count").textContent = e.target.value.length;
 });
 
+// 강도 버튼
 document.querySelectorAll(".intensity-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".intensity-btn").forEach(b => b.classList.remove("selected"));
@@ -28,6 +30,17 @@ document.querySelectorAll(".intensity-btn").forEach(btn => {
   });
 });
 
+// 사연 올리기 버튼
+document.getElementById("open-form-btn").addEventListener("click", () => {
+  document.getElementById("open-form-btn").classList.add("hidden");
+  document.getElementById("post-form").classList.remove("hidden");
+});
+document.getElementById("cancel-btn").addEventListener("click", () => {
+  document.getElementById("post-form").classList.add("hidden");
+  document.getElementById("open-form-btn").classList.remove("hidden");
+});
+
+// 글 제출
 document.getElementById("submit-btn").addEventListener("click", async () => {
   const story = document.getElementById("story").value.trim();
   const pw = document.getElementById("pw").value.trim();
@@ -56,6 +69,7 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
     document.getElementById("pw").value = "";
     document.getElementById("story-count").textContent = "0";
     document.getElementById("post-form").classList.add("hidden");
+    document.getElementById("open-form-btn").classList.remove("hidden");
   } catch (e) {
     alert("오류가 발생했어요: " + e.message);
     console.error(e);
@@ -65,6 +79,7 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
   }
 });
 
+// 글 목록 실시간 로드
 const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
 onSnapshot(q, (snapshot) => {
   const feed = document.getElementById("feed");
@@ -177,10 +192,3 @@ async function loadComments(postId) {
     list.appendChild(div);
   });
 }
-
-document.getElementById("open-form-btn").addEventListener("click", () => {
-  document.getElementById("post-form").classList.toggle("hidden");
-});
-document.getElementById("cancel-btn").addEventListener("click", () => {
-  document.getElementById("post-form").classList.add("hidden");
-});
