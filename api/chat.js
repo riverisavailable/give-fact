@@ -27,9 +27,16 @@ export default async function handler(req, res) {
       }
     );
     const data = await response.json();
+    console.log("Gemini response:", JSON.stringify(data));
+
+    if (data.promptFeedback?.blockReason) {
+      return res.status(200).json({ text: `[차단됨: ${data.promptFeedback.blockReason}] 다시 시도해보세요.` });
+    }
+
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "답변을 불러오지 못했어요.";
-    res.status(200).json({ text });
+    res.status(200).json({ text, debug: data });
   } catch (e) {
+    console.error("Error:", e);
     res.status(500).json({ error: e.message });
   }
 }
