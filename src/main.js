@@ -5,7 +5,7 @@ import {
   doc, orderBy, query, serverTimestamp, onSnapshot
 } from "firebase/firestore";
 
-const MASTER_PW = "password";
+const MASTER_PW = "940302";
 
 const INTENSITY = {
   순한맛: { emoji: "🌱", prompt: "따뜻한 명언이나 위로의 말로 답해줘. 유명한 철학자나 작가의 명언을 인용해도 좋아. 반말로 친근하게." },
