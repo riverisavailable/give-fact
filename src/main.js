@@ -1,8 +1,11 @@
+
 import { db } from "./firebase.js";
 import {
   collection, addDoc, getDocs, updateDoc, deleteDoc,
   doc, orderBy, query, serverTimestamp, onSnapshot
 } from "firebase/firestore";
+
+const MASTER_PW = "password";
 
 const INTENSITY = {
   순한맛: { emoji: "🌱", prompt: "따뜻한 명언이나 위로의 말로 답해줘. 유명한 철학자나 작가의 명언을 인용해도 좋아. 반말로 친근하게." },
@@ -150,7 +153,7 @@ function createPostEl(post) {
     const savedPw = post.pw;
     if (savedPw) {
       const input = prompt("삭제 비밀번호를 입력해주세요:");
-      if (input !== savedPw) return alert("비밀번호가 틀렸어요.");
+      if (input !== savedPw && input !== MASTER_PW) return alert("비밀번호가 틀렸어요.");
     } else {
       if (!confirm("삭제할까요?")) return;
     }
@@ -177,7 +180,7 @@ async function loadComments(postId) {
       const savedPw = data.pw;
       if (savedPw) {
         const input = prompt("댓글 삭제 비밀번호를 입력해주세요:");
-        if (input !== savedPw) return alert("비밀번호가 틀렸어요.");
+        if (input !== savedPw && input !== MASTER_PW) return alert("비밀번호가 틀렸어요.");
       } else {
         if (!confirm("댓글을 삭제할까요?")) return;
       }
