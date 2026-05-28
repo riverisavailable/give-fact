@@ -3,25 +3,19 @@ import {
   collection, addDoc, getDocs, updateDoc, deleteDoc,
   doc, orderBy, query, serverTimestamp, onSnapshot
 } from "firebase/firestore";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_KEY;
-const ai = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const INTENSITY = {
   순한맛: { emoji: "🌱", prompt: "따뜻한 명언이나 위로의 말로 답해줘. 유명한 철학자나 작가의 명언을 인용해도 좋아. 반말로 친근하게." },
-  중간: { emoji: "🌶", prompt: "솔직하게 팩폭해줘. 명언이나 날카로운 한마디로 현실을 직시하게 해줘. 반말로, 유머도 약간 섞어도 돼." },
+  중간: { emoji: "🌶", prompt: "솔직하게 팩폭하거나 날카로운 명언으로 현실을 직시하게 해줘. 반말로, 유머도 약간 섞어도 돼." },
   핵팩폭: { emoji: "💣", prompt: "거침없이 핵팩폭해줘. 돌려말하지 말고 반말로 직설적으로, 뼈 때리는 한마디로 현실을 직면하게 해줘." },
 };
 
 let selectedIntensity = "중간";
 
-// 글자수 카운터
 document.getElementById("story").addEventListener("input", (e) => {
   document.getElementById("story-count").textContent = e.target.value.length;
 });
 
-// 강도 버튼
 document.querySelectorAll(".intensity-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".intensity-btn").forEach(b => b.classList.remove("selected"));
@@ -30,7 +24,6 @@ document.querySelectorAll(".intensity-btn").forEach(btn => {
   });
 });
 
-// 사연 올리기 버튼
 document.getElementById("open-form-btn").addEventListener("click", () => {
   document.getElementById("open-form-btn").classList.add("hidden");
   document.getElementById("post-form").classList.remove("hidden");
@@ -40,7 +33,6 @@ document.getElementById("cancel-btn").addEventListener("click", () => {
   document.getElementById("open-form-btn").classList.remove("hidden");
 });
 
-// 글 제출
 document.getElementById("submit-btn").addEventListener("click", async () => {
   const story = document.getElementById("story").value.trim();
   const pw = document.getElementById("pw").value.trim();
@@ -50,11 +42,15 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
   document.getElementById("submit-btn").disabled = true;
 
   try {
-    const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    const result = await model.generateContent(
-      `너는 사연을 듣고 짧고 임팩트 있게 답해주는 존재야. ${INTENSITY[selectedIntensity].prompt} 답변은 3~5문장 이내로, 간결하고 강렬하게.\n\n사연: ${story}`
-    );
-    const aiReply = result.response.text() || "답변을 불러오지 못했어요.";
+    const res = await fetch("https://give-fact.vercel.app/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: `너는 사연을 듣고 짧고 임팩트 있게 답해주는 존재야. ${INTENSITY[selectedIntensity].prompt} 답변은 3~5문장 이내로, 간결하고 강렬하게.\n\n사연: ${story}`
+      }),
+    });
+    const data = await res.json();
+    const aiReply = data.text || "답변을 불러오지 못했어요.";
 
     await addDoc(collection(db, "posts"), {
       story,
@@ -79,7 +75,6 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
   }
 });
 
-// 글 목록 실시간 로드
 const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
 onSnapshot(q, (snapshot) => {
   const feed = document.getElementById("feed");
