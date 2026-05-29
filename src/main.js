@@ -49,7 +49,7 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        prompt: `너는 사연을 듣고 짧고 임팩트 있게 답해주는 존재야. ${INTENSITY[selectedIntensity].prompt} 답변은 3~5문장 이내로, 간결하고 강렬하게.\n\n사연: ${story}`
+        prompt: `너는 사연을 듣고 짧고 임팩트 있게 답해주는 존재야. ${INTENSITY[selectedIntensity].prompt} 답변은 3~5문장 이내로, 간결하고 강렬하게.반드시 완성된 문장으로 끝내줘.n\n사연: ${story}`
       }),
     });
     const data = await res.json();
